@@ -64,23 +64,75 @@ const people = [
 
 // Array.prototype.filter()
 // 1. Filter the list of inventors for those who were born in the 1500's
+const inventorsOf1500s = inventors.filter(
+	inventor => inventor.year >= 1500 && inventor.year <= 1599
+);
+console.table(inventorsOf1500s);
 
 // Array.prototype.map()
 // 2. Give us an array of the inventors' first and last names
+const inventorsFirstLastNames = inventors.map(inventor => {
+	return {first: inventor.first, last: inventor.last};
+});
+console.table(inventorsFirstLastNames);
 
 // Array.prototype.sort()
 // 3. Sort the inventors by birthdate, oldest to youngest
+const sortedInventors = inventors.sort(
+	(inventorA, inventorB) => inventorA.year - inventorB.year
+);
+console.table(sortedInventors);
 
 // Array.prototype.reduce()
 // 4. How many years did all the inventors live?
+const totalInventorsYears = inventors.reduce(
+	(total, inventor) => total + (inventor.passed - inventor.year),
+	0
+);
+console.log(totalInventorsYears);
 
 // 5. Sort the inventors by years lived
+const yearsLivedSortedInventors = inventors.sort(
+	(inventorA, inventorB) =>
+		inventorB.passed - inventorB.year - (inventorA.passed - inventorA.year)
+);
+console.table(yearsLivedSortedInventors);
 
 // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
 // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+// Run the following code on the above link
+const container = document.querySelector('.mw-category');
+if (container) {
+	const links = container.querySelectorAll('a');
+	const boulevardNames = Array.from(links).map(link => link.innerText);
+	const filteredNames = boulevardNames.filter(name => name.indexOf('de') > -1);
+	console.log(filteredNames);
+}
 
 // 7. sort Exercise
 // Sort the people alphabetically by last name
+const sortedPeopleLN = people.sort((personA, personB) =>
+	personA < personB ? -1 : personB < personA ? 1 : 0
+);
+console.table(sortedPeopleLN);
+
+const sortedPeopleLN1 = people.sort((personA, personB) =>
+	personA.split(',')[0] < personB.split(',')[0]
+		? -1
+		: personB.split(',')[0] < personA.split(',')[0]
+		? 1
+		: 0
+);
+console.table(sortedPeopleLN1);
+
+const sortedPeopleFN = people.sort((personA, personB) =>
+	personA.split(', ')[1] < personB.split(', ')[1]
+		? -1
+		: personB.split(', ')[1] < personA.split(', ')[1]
+		? 1
+		: 0
+);
+console.table(sortedPeopleFN);
 
 // 8. Reduce Exercise
 // Sum up the instances of each of these
@@ -100,3 +152,11 @@ const data = [
 	'car',
 	'truck'
 ];
+
+let instances = {};
+
+instances = data.reduce((result, el) => {
+	result.hasOwnProperty(el) ? result[el]++ : (result[el] = 0);
+	return result;
+}, instances);
+console.table([instances]);
