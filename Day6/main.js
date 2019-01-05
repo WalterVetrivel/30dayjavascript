@@ -27,24 +27,38 @@ const getCountries = async name => {
 };
 
 const getCountrySuggestions = async event => {
+	if (event.key === 'Enter') {
+		searchCountries();
+		return;
+	} else if (
+		event.key === 'Control' ||
+		event.key === 'Shift' ||
+		event.key === 'Alt'
+	) {
+		return;
+	}
 	const name = event.target.value;
-	const countries = await getCountries(name);
-	if (countries) {
-		const suggestions = countries.map(country => {
-			let displayName = country.name;
-			const index = country.name.toLowerCase().indexOf(name.toLowerCase());
-			if (index > -1) {
-				const part1 = country.name.slice(0, index);
-				const highlightPart = country.name.slice(index, index + name.length);
-				const part2 = country.name.slice(
-					index + name.length,
-					country.name.length
-				);
-				displayName = `${part1}<span class="highlight">${highlightPart}</span>${part2}`;
-			}
-			return `<p class="suggestion">${displayName}</p>`;
-		});
-		suggestionDiv.innerHTML = suggestions.join('');
+	if (name) {
+		const countries = await getCountries(name);
+		if (countries) {
+			const suggestions = countries.map(country => {
+				let displayName = country.name;
+				const index = country.name.toLowerCase().indexOf(name.toLowerCase());
+				if (index > -1) {
+					const part1 = country.name.slice(0, index);
+					const highlightPart = country.name.slice(index, index + name.length);
+					const part2 = country.name.slice(
+						index + name.length,
+						country.name.length
+					);
+					displayName = `${part1}<span class="highlight">${highlightPart}</span>${part2}`;
+				}
+				return `<p class="suggestion">${displayName}</p>`;
+			});
+			suggestionDiv.innerHTML = suggestions.join('');
+		} else {
+			suggestionDiv.innerHTML = `<p class="suggestion">No countries found.</p>`;
+		}
 	} else {
 		suggestionDiv.innerHTML = null;
 	}
@@ -73,3 +87,15 @@ const searchCountries = async event => {
 countryInput.addEventListener('keyup', getCountrySuggestions);
 suggestionDiv.addEventListener('click', setCountryName);
 searchButton.addEventListener('click', searchCountries);
+searchResultsDiv.addEventListener('scroll', event => {
+	const pos = searchResultsDiv.scrollTop;
+	if (pos > 0) {
+		searchResultsDiv.parentNode
+			.querySelector('.search-box')
+			.classList.add('bottom-shadow');
+	} else {
+		searchResultsDiv.parentNode
+			.querySelector('.search-box')
+			.classList.remove('bottom-shadow');
+	}
+});

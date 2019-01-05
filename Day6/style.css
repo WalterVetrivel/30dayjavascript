@@ -37,6 +37,10 @@ h2 {
     position: relative;
 }
 
+.bottom-shadow {
+	box-shadow: 0 2px 1px rgba(0, 0, 0, .25);
+}
+
 input,
 button {
     font: inherit;
@@ -91,6 +95,10 @@ button {
 .search-result {
     padding: 1rem .5rem;
     background-color: #f3f3f3;
+}
+
+.search-result:nth-child(even) {
+	background-color: #fff;
 }
 
 .search-result p:not(:last-of-type) {
